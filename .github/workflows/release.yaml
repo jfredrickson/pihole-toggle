@@ -13,6 +13,8 @@ jobs:
       contents: write
 
     steps:
+      - uses: actions/checkout@v4
+
       - name: Create a new release
         run: |
           if ! gh release view ${{ github.ref_name }} &>/dev/null; then
