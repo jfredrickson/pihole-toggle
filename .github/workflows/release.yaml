@@ -30,7 +30,7 @@ jobs:
           NAME="pihole-toggle-${{ github.ref_name }}-${{ matrix.goos }}-${{ matrix.goarch }}"
           go mod download
           GOOS=${{ matrix.goos }} GOARCH=${{ matrix.goarch }} go build -o "$NAME"
-          gzip -c "$NAME" > "dist/$NAME.gz"
+          tar -cJf "dist/$NAME.tar.xz" "$NAME"
 
       - name: Release
         run: |
