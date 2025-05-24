@@ -7,7 +7,6 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"strings"
 )
 
 type PiholeClientRequest struct {
@@ -46,7 +45,7 @@ func main() {
 
 func setBlocking(on bool) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		clientName := parseClientName(r.RemoteAddr)
+		clientName := r.Header.Get("X-Forwarded-For")
 		endpointURL := fmt.Sprintf("%s/api/clients/%s", piholeURL, clientName)
 
 		clientsRequest := PiholeClientRequest{
@@ -89,8 +88,4 @@ func setBlocking(on bool) http.HandlerFunc {
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte(`{"message": "Success"}`))
 	}
-}
-
-func parseClientName(remoteAddr string) string {
-	return strings.Split(remoteAddr, ":")[0]
 }
